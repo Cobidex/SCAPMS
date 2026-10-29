@@ -1,61 +1,71 @@
 #include "controller/SortEngine.h"
 
-#include <stdexcept>
-
 namespace scapms::controller {
 
 using model::PatientRecord;
 
-// TODO(student): insertion sort.
-//  - Sort `items` in place into the order defined by less().
-//  - Stable: items that compare equal keep their original order.
-//  - Add 1 to `comparisons` each time you call less().
-//  - Do not use std::sort, std::stable_sort or any other library sort.
+// Shifts each item left past every larger item before it. Equal items are not
+// passed, so the sort is stable.
 void SortEngine::insertionSort(std::vector<PatientRecord*>& items, const Compare& less, long& comparisons)
 {
-    (void)items;
-    (void)less;
-    (void)comparisons;
-    throw std::logic_error("Insertion sort is not implemented yet (controller/SortEngine.cpp)");
+    for (std::size_t i = 1; i < items.size(); ++i) {
+        PatientRecord* current = items[i];
+        std::size_t j = i;
+        while (j > 0) {
+            ++comparisons;
+            if (!less(current, items[j - 1])) {
+                break;
+            }
+            items[j] = items[j - 1];
+            --j;
+        }
+        items[j] = current;
+    }
 }
 
-// TODO(student): merge sort entry point.
-//  - Call mergeSortRange on the whole vector.
 void SortEngine::mergeSort(std::vector<PatientRecord*>& items, const Compare& less, long& comparisons)
 {
-    (void)items;
-    (void)less;
-    (void)comparisons;
-    throw std::logic_error("Merge sort is not implemented yet (controller/SortEngine.cpp)");
+    mergeSortRange(items, 0, items.size(), less, comparisons);
 }
 
-// TODO(student): recursive step of merge sort.
-//  - Base case: a range of 0 or 1 items is already sorted.
-//  - Otherwise split at the middle, sort both halves recursively, then merge.
 void SortEngine::mergeSortRange(std::vector<PatientRecord*>& items, std::size_t left, std::size_t right,
                                 const Compare& less, long& comparisons)
 {
-    (void)items;
-    (void)left;
-    (void)right;
-    (void)less;
-    (void)comparisons;
-    throw std::logic_error("Merge sort is not implemented yet (controller/SortEngine.cpp)");
+    if (right - left <= 1) {
+        return;
+    }
+    const std::size_t mid = left + (right - left) / 2;
+    mergeSortRange(items, left, mid, less, comparisons);
+    mergeSortRange(items, mid, right, less, comparisons);
+    merge(items, left, mid, right, less, comparisons);
 }
 
-// TODO(student): merge two sorted halves using a temporary vector.
-//  - Stable: when two items are equal, take the one from the left half first.
-//  - Add 1 to `comparisons` each time you call less().
+// Takes from the right half only when it is strictly smaller, which keeps the
+// merge stable.
 void SortEngine::merge(std::vector<PatientRecord*>& items, std::size_t left, std::size_t mid, std::size_t right,
                        const Compare& less, long& comparisons)
 {
-    (void)items;
-    (void)left;
-    (void)mid;
-    (void)right;
-    (void)less;
-    (void)comparisons;
-    throw std::logic_error("Merge sort is not implemented yet (controller/SortEngine.cpp)");
+    std::vector<PatientRecord*> merged;
+    merged.reserve(right - left);
+    std::size_t i = left;
+    std::size_t j = mid;
+    while (i < mid && j < right) {
+        ++comparisons;
+        if (less(items[j], items[i])) {
+            merged.push_back(items[j++]);
+        } else {
+            merged.push_back(items[i++]);
+        }
+    }
+    while (i < mid) {
+        merged.push_back(items[i++]);
+    }
+    while (j < right) {
+        merged.push_back(items[j++]);
+    }
+    for (std::size_t k = 0; k < merged.size(); ++k) {
+        items[left + k] = merged[k];
+    }
 }
 
 } // namespace scapms::controller
