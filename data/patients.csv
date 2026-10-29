@@ -1,0 +1,19 @@
+category,id,name,age,contact,extra1,extra2
+General,P0001,Ada Okafor,34,08031234567,Persistent cough,
+Emergency,P0002,Musa Bello,52,08029876543,4,Chest pain on arrival
+FollowUp,P0003,Grace Eze,27,07011223344,2026-10-01,Dr. Adeyemi
+General,P0004,Chinedu Okafor,61,08035550101,Lower back pain,
+General,P0005,Adamu Sani,19,08035550102,Fever and headache,
+Emergency,P0006,Ngozi Umeh,45,08035550103,2,Sprained ankle
+FollowUp,P0007,Tunde Bakare,70,08035550104,2026-09-20,Dr. Musa
+General,P0008,Fatima Lawal,8,08035550105,Childhood vaccination,
+General,P0009,Bisi Adeyemi,34,08035550106,Recurring migraine,
+FollowUp,P0010,Emeka Obi,52,08035550107,2026-10-10,Dr. Adeyemi
+Emergency,P0011,Halima Yusuf,29,08035550108,5,Severe allergic reaction
+General,P0012,Ifeanyi Nwosu,41,08035550109,Annual check-up,
+FollowUp,P0013,Kemi Alade,66,08035550110,2026-10-15,Dr. Okonkwo
+General,P0014,Yusuf Garba,3,08035550111,Ear infection,
+Emergency,P0015,Obinna Eze,23,08035550112,3,Deep cut on left hand
+FollowUp,P0016,Aisha Bello,38,08035550113,2026-09-30,Dr. Musa
+General,P0017,Segun Afolabi,85,08035550114,Joint stiffness,
+General,P0018,Zainab Ahmed,15,08035550115,Skin rash,

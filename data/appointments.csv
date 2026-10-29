@@ -1,0 +1,29 @@
+id,patientId,date,time,reason,status
+A0001,P0001,2026-10-05,09:30,General check-up,Completed
+A0002,P0002,2026-10-12,14:00,ECG review,Completed
+A0003,P0002,2026-10-20,10:00,Cardiology consult,Completed
+A0004,P0003,2026-10-08,11:00,Wound dressing review,Completed
+A0005,P0004,2026-10-14,08:30,Physiotherapy,Completed
+A0006,P0004,2026-10-21,08:30,Physiotherapy,Completed
+A0007,P0004,2026-10-28,08:30,Physiotherapy,Completed
+A0008,P0005,2026-10-16,13:00,Malaria test,Completed
+A0009,P0007,2026-10-02,15:00,Blood pressure review,Completed
+A0010,P0007,2026-10-23,15:00,Blood pressure review,Completed
+A0011,P0009,2026-10-19,16:00,Migraine review,Cancelled
+A0012,P0010,2026-10-22,09:00,Post-surgery review,Completed
+A0013,P0011,2026-10-27,12:00,URGENT: Allergy follow-up,Completed
+A0014,P0012,2026-10-26,10:30,Annual check-up,Cancelled
+A0015,P0002,2026-10-29,09:00,URGENT: Chest pain review,Completed
+A0016,P0006,2026-10-29,10:15,Ankle X-ray,Pending
+A0017,P0011,2026-10-29,13:30,URGENT: Allergy monitoring,Pending
+A0018,P0015,2026-10-29,15:45,Stitches check,Pending
+A0019,P0008,2026-10-29,11:00,Vaccination,Cancelled
+A0020,P0001,2026-11-03,09:30,Chest X-ray results,Pending
+A0021,P0003,2026-11-05,11:00,Follow-up consultation,Pending
+A0022,P0004,2026-11-04,08:30,Physiotherapy,Pending
+A0023,P0007,2026-11-13,15:00,Blood pressure review,Pending
+A0024,P0008,2026-11-02,10:00,Vaccination (rescheduled),Pending
+A0025,P0013,2026-11-10,14:30,Diabetes review,Pending
+A0026,P0014,2026-11-01,09:45,Ear check,Pending
+A0027,P0016,2026-11-06,12:15,Thyroid results,Pending
+A0028,P0017,2026-10-30,10:00,Arthritis assessment,Cancelled
