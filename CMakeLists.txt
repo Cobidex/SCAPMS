@@ -16,10 +16,10 @@ add_library(scapms_core STATIC
     model/FollowUpPatient.cpp
     model/Appointment.cpp
     model/ClinicDatabase.cpp
-#     controller/ClinicManager.cpp
-#     controller/AppointmentController.cpp
-#     controller/SearchEngine.cpp
-#     controller/SortEngine.cpp
+    controller/ClinicManager.cpp
+    controller/AppointmentController.cpp
+    controller/SearchEngine.cpp
+    controller/SortEngine.cpp
     utils/IDGenerator.cpp
     utils/FileHandler.cpp
 )
