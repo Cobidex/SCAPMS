@@ -1,12 +1,11 @@
 #include <QApplication>
-#include <QMainWindow>
+
+#include "gui/MainWindow.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    QMainWindow window;
-    window.setWindowTitle("SCAPMS");
-    window.resize(1100, 700);
+    scapms::gui::MainWindow window;
     window.show();
     return app.exec();
 }

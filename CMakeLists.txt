@@ -32,13 +32,14 @@ target_link_libraries(scapms_tests PRIVATE scapms_core)
 # Qt GUI application (Phase 5)
 qt_add_executable(SCAPMS
     main.cpp
-    # gui/MainWindow.h        gui/MainWindow.cpp
-    # gui/DashboardPanel.h    gui/DashboardPanel.cpp
-    # gui/PatientPanel.h      gui/PatientPanel.cpp
-    # gui/AppointmentPanel.h  gui/AppointmentPanel.cpp
-    # gui/QueuePanel.h        gui/QueuePanel.cpp
-    # gui/SearchPanel.h       gui/SearchPanel.cpp
-    # gui/AdminPanel.h        gui/AdminPanel.cpp
-    # gui/ReportPanel.h       gui/ReportPanel.cpp
+    gui/GuiHelpers.h        gui/GuiHelpers.cpp
+    gui/MainWindow.h        gui/MainWindow.cpp
+    gui/DashboardPanel.h    gui/DashboardPanel.cpp
+    gui/PatientPanel.h      gui/PatientPanel.cpp
+    gui/AppointmentPanel.h  gui/AppointmentPanel.cpp
+    gui/QueuePanel.h        gui/QueuePanel.cpp
+    gui/SearchPanel.h       gui/SearchPanel.cpp
+    gui/AdminPanel.h        gui/AdminPanel.cpp
+    gui/ReportPanel.h       gui/ReportPanel.cpp
 )
-target_link_libraries(SCAPMS PRIVATE Qt6::Widgets)
+target_link_libraries(SCAPMS PRIVATE scapms_core Qt6::Widgets)
