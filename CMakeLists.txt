@@ -20,8 +20,8 @@ add_library(scapms_core STATIC
 #     controller/AppointmentController.cpp
 #     controller/SearchEngine.cpp
 #     controller/SortEngine.cpp
-#     utils/IDGenerator.cpp
-#     utils/FileHandler.cpp
+    utils/IDGenerator.cpp
+    utils/FileHandler.cpp
 )
 target_include_directories(scapms_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 

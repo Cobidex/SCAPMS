@@ -1,6 +1,8 @@
 // Console checks for the model, utils and controller layers (no Qt).
 // Run from the project root: ./build/scapms_tests
 
+#include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -12,6 +14,8 @@
 #include "model/FollowUpPatient.h"
 #include "model/GeneralPatient.h"
 #include "utils/Exceptions.h"
+#include "utils/FileHandler.h"
+#include "utils/IDGenerator.h"
 #include "utils/TextUtils.h"
 
 using namespace scapms;
@@ -149,6 +153,80 @@ void testDatabase()
     expectThrow<utils::NotFoundException>([&db] { db.removeAppointment("A0404"); }, "remove missing appointment");
 }
 
+std::string tempPath(const std::string& name)
+{
+    return (std::filesystem::temp_directory_path() / ("scapms_" + name)).string();
+}
+
+void writeFile(const std::string& path, const std::string& content)
+{
+    std::ofstream out(path);
+    out << content;
+}
+
+void testIdGenerator()
+{
+    section("IDGenerator");
+    utils::IDGenerator::reset();
+    check(utils::IDGenerator::nextPatientId() == "P0001", "first patient ID is P0001");
+    check(utils::IDGenerator::nextAppointmentId() == "A0001", "first appointment ID is A0001");
+    utils::IDGenerator::syncPatients({"P0003", "P0012", "P0007"});
+    check(utils::IDGenerator::peekNextPatientId() == "P0013", "syncPatients continues after the highest ID");
+    check(utils::IDGenerator::nextPatientId() == "P0013", "peek does not consume an ID");
+    utils::IDGenerator::reset();
+}
+
+void testFileRoundTrip()
+{
+    section("CSV save and load");
+    ClinicDatabase db;
+    db.addPatient(std::make_unique<GeneralPatient>("P0001", "Ada Okafor", 34, "08031234567", "Persistent cough"));
+    db.addPatient(std::make_unique<EmergencyPatient>("P0002", "Musa Bello", 52, "08029876543", 4, "Chest pain"));
+    db.addPatient(std::make_unique<FollowUpPatient>("P0003", "Grace Eze", 27, "07011223344", "2026-10-01",
+                                                    "Dr. Adeyemi"));
+    db.addAppointment(Appointment("A0001", "P0001", "2026-11-03", "09:30", "General check-up"));
+    db.addAppointment(Appointment("A0002", "P0002", "2026-10-28", "14:00", "ECG review",
+                                  Appointment::Status::Completed));
+
+    const std::string patientsPath = tempPath("patients.csv");
+    const std::string appointmentsPath = tempPath("appointments.csv");
+    utils::FileHandler::savePatients(patientsPath, db.getPatients());
+    utils::FileHandler::saveAppointments(appointmentsPath, db.getAppointments());
+
+    auto patients = utils::FileHandler::loadPatients(patientsPath);
+    auto appointments = utils::FileHandler::loadAppointments(appointmentsPath);
+    check(patients.size() == 3 && appointments.size() == 2, "same number of records after loading");
+    bool same = patients.size() == 3;
+    for (std::size_t i = 0; same && i < patients.size(); ++i) {
+        const PatientRecord* original = db.getPatients()[i];
+        same = patients[i]->getId() == original->getId() && patients[i]->getName() == original->getName() &&
+               patients[i]->getCategory() == original->getCategory() &&
+               patients[i]->describe() == original->describe();
+    }
+    check(same, "patients match field by field, including subclass fields");
+    check(appointments.size() == 2 && appointments[1].getStatus() == Appointment::Status::Completed,
+          "appointment status survives the round trip");
+
+    expectThrow<utils::FileException>([] { utils::FileHandler::loadPatients(tempPath("missing.csv")); },
+                                      "missing file");
+
+    const std::string broken = tempPath("broken.csv");
+    writeFile(broken, "category,id,name,age,contact,extra1,extra2\r\n"
+                      "General,P0001,Ada Okafor,34,08031234567,Cough,\r\n"
+                      "General,P0002,Bad Age,abc,08031234567,Cough,\r\n");
+    expectThrow<utils::FileException>([&] { utils::FileHandler::loadPatients(broken); }, "age 'abc' on line 3");
+
+    writeFile(broken, "category,id,name,age,contact,extra1,extra2\nAlien,P0001,Ada,34,08031234567,x,\n");
+    expectThrow<utils::FileException>([&] { utils::FileHandler::loadPatients(broken); }, "unknown category");
+
+    writeFile(broken, "category,id,name,age,contact,extra1,extra2\nGeneral,P0001,Ada,34\n");
+    expectThrow<utils::FileException>([&] { utils::FileHandler::loadPatients(broken); }, "too few columns");
+
+    std::filesystem::remove(patientsPath);
+    std::filesystem::remove(appointmentsPath);
+    std::filesystem::remove(broken);
+}
+
 } // namespace
 
 int main()
@@ -157,6 +235,8 @@ int main()
     testValidation();
     testSchedulingRules();
     testDatabase();
+    testIdGenerator();
+    testFileRoundTrip();
 
     std::cout << "\n" << passed << " passed, " << failed << " failed\n";
     return failed == 0 ? 0 : 1;
